@@ -1,10 +1,14 @@
 package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.utils;
 
-import com.dmtlabs.aidocentserver.commons.message.MessageConfig;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.base.DTOMetadata;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.base.GeneralResDTO;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.base.ThrowableSupplier;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.base.pagenation.GeneralPageableResDTO;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.messages.MessageConfig;
 import feign.Response;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -43,10 +47,12 @@ public abstract class APIUtil {
             return ResponseEntity.ok(resDTO);
         } catch (Exception e) {
             GeneralResDTO errorResDTO = new GeneralResDTO();
-            logger.warn(e.getLocalizedMessage());
-            logger.warn("------------------------------ Request Process Failed | StackTrace ------------------------------");
-            logger.warn(APIUtil.getPrintStackTrace(e));
-            logger.warn("-------------------------------------------------------------------------------------------------");
+            String errorLog =
+                    "[ERR]" + e.getLocalizedMessage()
+                    + "-------------------------- Request Failure StackTrace --------------------------"
+                    + APIUtil.getPrintStackTrace(e)
+                    + "--------------------------------------------------------------------------------";
+            logger.warn(errorLog);
             errorResDTO.set_metadata(new DTOMetadata(e.getMessage(), e.getClass().getName()));
             return ResponseEntity.status(400).body(errorResDTO);
         }

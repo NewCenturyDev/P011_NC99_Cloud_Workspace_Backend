@@ -4,10 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@EnableFeignClients
 public class P011Nc99CloudWorkspaceBackendApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(P011Nc99CloudWorkspaceBackendApplication.class, args);
     }
-
 }

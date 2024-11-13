@@ -1,7 +1,8 @@
-package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security;
+package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.filters;
 
-import com.dmtlabs.aidocentserver.commons.security.clients.CommonUserProfile;
-import com.dmtlabs.aidocentserver.commons.security.clients.TokenIntrospectAPIDTO;
+ååimport com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.JWTTokenProvider;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.JWTTokenProvider;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.entities.CommonUserProfile;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

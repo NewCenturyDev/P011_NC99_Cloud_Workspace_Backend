@@ -22,40 +22,44 @@ public class LoggerInterceptor implements HandlerInterceptor {
     private final ObjectMapper objectMapper;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
+    public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
         // 스프링 시큐리티 요청 객체의 경우 다시 캐싱 객체로 래핑하면 오류 발생함으로 제외
-        if (request.getClass().getName().contains("SecurityContextHolderAwareRequestWrapper") || request.getClass().getName().contains("StandardMultipartHttpServlet")) {
-            logger.warn("Spring Security Wrapped Content Cannot Readable on LoggerInterceptor. Check Filter Order Settings");
+        if (this.checkSecurityReqObject(request)) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
         final ContentCachingRequestWrapper wrappingReq = (ContentCachingRequestWrapper) request;
-        String log = """
-        ========== REQ BEGIN ==========>>>
-                Request URI   : [\{request.getMethod()}] \{request.getRequestURI()}
-                Request Param : \{request.getParameterMap().entrySet().stream().map(
-                e -> e.getKey() + "=" + String.join(", ", e.getValue())
-        ).collect(Collectors.joining(" "))}
-        ========== REQ BEGIN ==========>>>
-        """;
+        String log = "========== REQ BEGIN ==========>>>"
+                + "Request URI: [" + request.getMethod() + "] " + request.getRequestURI()
+                + "Request Param: " + request.getParameterMap().entrySet().stream()
+                .map(e -> e.getKey() + "=" + String.join(", ", e.getValue()))
+                .collect(Collectors.joining(", ")) + "</Request>"
+                + "========== REQ ENDED ==========>>>";
         logger.info(log);
         return HandlerInterceptor.super.preHandle(wrappingReq, response, handler);
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler, ModelAndView modelAndView) throws Exception {
-        if (request.getClass().getName().contains("SecurityContextHolderAwareRequestWrapper") || request.getClass().getName().contains("StandardMultipartHttpServlet")) {
-            logger.warn("Spring Security Wrapped Content Cannot Readable on LoggerInterceptor. Check Filter Order Settings");
+    public void postHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler, ModelAndView modelAndView) throws Exception {
+        if (this.checkSecurityReqObject(request)) {
             return;
         }
         final ContentCachingRequestWrapper wrappingReq = (ContentCachingRequestWrapper) request;
         final ContentCachingResponseWrapper wrappingRes = (ContentCachingResponseWrapper) response;
 
-        logger.info("=================================================================================================");
-        logger.info("Request URI ====> " + request.getRequestURI());
-        logger.info("Request Body ===> " + objectMapper.readTree(wrappingReq.getContentAsByteArray()));
-        logger.info("Response Body ==> " + objectMapper.readTree(wrappingRes.getContentAsByteArray()));
-        logger.info("=============================================REQUEST=============================================");
-        logger.info("===============================================END===============================================");
+        String log = "<<<========== RES BEGIN =========="
+                + "Request URI: [" + request.getMethod() + "] " + request.getRequestURI()
+                + "REQ Body: " + objectMapper.readTree(wrappingReq.getContentAsByteArray())
+                + "RES Body: " + objectMapper.readTree(wrappingRes.getContentAsByteArray())
+                + "<<<========== RES ENDED ==========";
+        logger.info(log);
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
+    }
+
+    private Boolean checkSecurityReqObject(HttpServletRequest request) {
+        Boolean isSecurityReqObj = request.getClass().getName().contains("SecurityContextHolderAwareRequestWrapper") || request.getClass().getName().contains("StandardMultipartHttpServlet");
+        if (request.getClass().getName().contains("SecurityContextHolderAwareRequestWrapper") || request.getClass().getName().contains("StandardMultipartHttpServlet")) {
+            logger.warn("Spring Security Wrapped Content Cannot Readable on LoggerInterceptor. Check Filter Order Settings");
+        }
+        return isSecurityReqObj;
     }
 }
