@@ -1,22 +1,12 @@
 package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.Authentication;
 
-import java.util.Locale;
-
-@Getter
-@Setter
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
-public class CommonUserProfile {
-    private Long id;
-    protected String email;
-    private Locale language;
-    protected String username;
-    protected Locale country;
+public interface CommonUserProfile<T extends CommonUserProfile<?>> {
+    T fromAuthentication(Authentication authentication);
+    Boolean hasPrivilege(CommonUserACL required);
+    Boolean hasPrivilege(String role);
+    void checkPrivilege(CommonUserACL required);
+    void checkPrivilege(String role);
+    String getCurrentServicePrivilege();
 }

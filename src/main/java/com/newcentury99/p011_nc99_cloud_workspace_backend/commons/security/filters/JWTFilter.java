@@ -1,8 +1,8 @@
 package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.filters;
 
-ååimport com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.JWTTokenProvider;
-import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.JWTTokenProvider;
-import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.entities.CommonUserProfile;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.jwt.JWTTokenProvider;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.entities.CommonUserProfileImpl;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.sso.dto.TokenIntrospectAPIDTO;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -56,7 +56,7 @@ public class JWTFilter extends OncePerRequestFilter {
         try {
             TokenIntrospectAPIDTO tokenBody = jwtTokenProvider.introspectToken(jwtToken);
             if(tokenBody != null && tokenBody.getActive() && SecurityContextHolder.getContext().getAuthentication() == null) {
-                CommonUserProfile userDetails = tokenBody.getProfile();
+                CommonUserProfileImpl userDetails = tokenBody.getProfile();
                 if (userDetails == null) {
                     logger.warn("Login failed: User Not Found");
                 } else if (!userDetails.getVerified()) {
