@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CRUDEntityRepo<T> extends JpaRepository<T, Long> {
+public interface CRUDEntityRepo<T, ID> extends JpaRepository<T, ID> {
     @LibraryAPI
-    Boolean existsByEid(Long eid);
+    Boolean existsByEid(ID eid);
 }

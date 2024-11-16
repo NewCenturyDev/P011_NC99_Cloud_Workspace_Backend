@@ -20,5 +20,5 @@ public interface SSOClient {
     Response exchangeTokenAPI(@SpringQueryMap Map<String, Object> reqDTO);
 
     @GetMapping("/users/profiles")
-    Response fetchCommonUserProfileByEmail(@RequestHeader("Authorization") String token, @SpringQueryMap Map<String, Object> reqDTO);
+    Response fetchBaseUserProfileByEmail(@RequestHeader("Authorization") String token, @SpringQueryMap Map<String, Object> reqDTO);
 }

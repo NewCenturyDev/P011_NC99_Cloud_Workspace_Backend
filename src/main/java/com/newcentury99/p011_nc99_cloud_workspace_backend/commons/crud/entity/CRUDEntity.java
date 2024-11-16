@@ -1,21 +1,22 @@
 package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.crud.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.annotations.LibraryClass;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @LibraryClass
-public class CRUDEntity {
+@Getter
+@Setter
+public class CRUDEntity<ID> {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "eid")
-    protected UUID eid;
+    @Column(name = "id")
+    protected ID id;
 
     @NotBlank(message = "valid.entity.contributor.blank")
     @Size(max = 250, message = "valid.entity.contributor.size")
@@ -29,4 +30,8 @@ public class CRUDEntity {
     @NotNull(message = "valid.entity.modified.null")
     @Column
     protected LocalDateTime modifiedAt;
+
+    @JsonIgnore
+    @Transient
+    protected Boolean hasStaticFile = false;
 }
