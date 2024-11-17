@@ -7,14 +7,12 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.base.DTOMetadata;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.base.GeneralResDTO;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.base.ThrowableSupplier;
-import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.base.pagenation.GeneralPageableResDTO;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.messages.MessageConfig;
 import feign.Response;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.MessageSource;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
@@ -27,9 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 public abstract class APIUtil {
     private static final MessageSource resMsgSrc = MessageConfig.getResponseMsgSrc();
@@ -87,16 +83,6 @@ public abstract class APIUtil {
                 response.setContentLength(0);
             }
         }
-    }
-
-    public static <T extends GeneralPageableResDTO, E> void buildPageableResDTO(T resDTO, Page<E> page, Consumer<List<E>> contentSetter) {
-        if (page.getPageable().isPaged()) {
-            resDTO.setPageable(true);
-            resDTO.setPageIdx(page.getNumber());
-            resDTO.setTotalPage(page.getTotalPages());
-            resDTO.setPageElementSize(page.getTotalElements());
-        }
-        contentSetter.accept(page.getContent());
     }
 
     public static String getBodyJSONString(InputStream inputStream) throws IOException {

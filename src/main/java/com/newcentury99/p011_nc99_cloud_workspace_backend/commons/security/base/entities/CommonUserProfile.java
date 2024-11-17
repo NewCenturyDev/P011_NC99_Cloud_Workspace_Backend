@@ -2,10 +2,7 @@ package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -37,14 +34,18 @@ public class CommonUserProfile implements OAuth2User {
     protected Locale language;
     @Column
     protected Locale country;
+    @Builder.Default
     @Column
     protected LocalDateTime createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     @Column
     protected LocalDateTime lastLoginAt;
+    @Builder.Default
     @Column(nullable = false)
     protected Boolean verified = false;
+    @Builder.Default
     @Column(nullable = false)
     protected Boolean active = false;
+    @Builder.Default
     @Column(nullable = false)
     protected Boolean locked = false;
 
