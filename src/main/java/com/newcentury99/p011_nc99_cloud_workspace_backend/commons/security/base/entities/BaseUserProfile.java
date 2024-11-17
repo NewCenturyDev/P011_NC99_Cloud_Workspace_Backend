@@ -1,77 +1,60 @@
 package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.databases.converters.JsonColumnListConverter;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.*;
+import java.nio.file.AccessDeniedException;
+import java.util.Collection;
+import java.util.List;
 
+@Entity
 @Getter
-@Setter
 @SuperBuilder
-@MappedSuperclass
-@NoArgsConstructor
 @AllArgsConstructor
-public class BaseUserProfile implements UserDetails {
+@NoArgsConstructor
+public class BaseUserProfile extends CommonUserProfile implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id")
-    protected String id;
+    private String id;
+
+    @Convert(converter = JsonColumnListConverter.class)
     @Column
-    protected Locale language;
-    @Column(unique = true, nullable = false)
-    protected String email;
-    @Column
-    protected String password;
-    @Column
-    protected String username;
-    @Column
-    protected Locale country;
-    @Column
-    protected UserGender gender;
-    @Column(unique = true)
-    protected String phone;
-    @Column
-    protected LocalDateTime createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-    @Column
-    protected LocalDateTime lastLoginAt;
+    private List<String> groups;
+
+    @Setter
     @Column
     protected BaseUserRole role;
-    @Column(nullable = false)
-    protected Boolean verified = false;
-    @Column(nullable = false)
-    protected Boolean active = false;
-    @Column(nullable = false)
-    protected Boolean locked = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(this.role);
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.verified;
+    public static BaseUserProfile fromAuthentication(Authentication auth) {
+        return (BaseUserProfile) auth.getPrincipal();
     }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return !this.locked;
+    public Boolean hasPrivilege(BaseUserRole required) {
+        return this.role.equals(required);
     }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.verified;
+    public void checkPrivilege(BaseUserRole required) throws AccessDeniedException {
+        if (!hasPrivilege(required)) {
+            throw new AccessDeniedException("FORBIDDEN");
+        }
     }
 
-    @Override
-    public boolean isEnabled() {
-        return this.active;
+    public static void checkPrivilege(Authentication auth, BaseUserRole required) throws AccessDeniedException {
+        BaseUserProfile user = BaseUserProfile.fromAuthentication(auth);
+        user.checkPrivilege(required);
     }
 }

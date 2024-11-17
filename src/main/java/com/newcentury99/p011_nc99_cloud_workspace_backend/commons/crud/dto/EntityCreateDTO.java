@@ -3,6 +3,7 @@ package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.crud.dto;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.base.GeneralResDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -21,18 +22,20 @@ public class EntityCreateDTO {
     }
 
     @Data
+    @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
     public static class SingleResponse<T> extends Response {
-        private final T created;
+        private T created;
         public SingleResponse(T entity) {
             this.created = entity;
         }
     }
 
     @Data
+    @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
     public static class BulkResponse<T> extends Response {
-        private final List<T> created;
+        private List<T> created;
         public BulkResponse(List<T> created) {
             this.created = created;
         }

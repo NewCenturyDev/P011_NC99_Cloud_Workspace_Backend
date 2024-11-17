@@ -1,7 +1,7 @@
 package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.sso.dto;
 
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.base.GeneralResDTO;
-import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities.BaseUserProfile;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities.CommonUserProfile;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,5 +20,5 @@ public class TokenIntrospectAPIDTO extends GeneralResDTO {
     private Instant exp;
     private Instant iat;
     private String error;
-    private BaseUserProfile profile;
+    private CommonUserProfile profile;
 }

@@ -47,27 +47,30 @@ public class EntityFetchDTO {
     }
 
     @Data
+    @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
     public static class SingleResponse<T> extends Response {
-        private final T result;
+        private T result;
         public SingleResponse(T entity) {
             this.result = entity;
         }
     }
 
     @Data
+    @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
     public static class BulkResponse<T> extends Response {
-        private final List<T> results;
+        private List<T> results;
         public BulkResponse(List<T> entities) {
             this.results = entities;
         }
     }
 
     @Data
+    @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
     public static class PageResponse<T> extends Response {
-        private final Page<T> results;
+        private Page<T> results;
         private Integer pageIdx;
         private Integer totalPages;
         private Integer pageSize;

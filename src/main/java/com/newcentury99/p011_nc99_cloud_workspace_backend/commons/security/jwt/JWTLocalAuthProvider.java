@@ -1,7 +1,7 @@
 package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.jwt;
 
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities.BaseUserProfile;
-import com.newcentury99.p011_nc99_cloud_workspace_backend.domains.auths.profiles.repo.AppUserRepo;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.repo.BaseUserRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class JWTLocalAuthProvider implements AuthenticationProvider {
-    private AppUserRepo appUserProfileRepo;
+    private BaseUserRepo appUserProfileRepo;
     private PasswordEncoder encoder;
 
     @Override

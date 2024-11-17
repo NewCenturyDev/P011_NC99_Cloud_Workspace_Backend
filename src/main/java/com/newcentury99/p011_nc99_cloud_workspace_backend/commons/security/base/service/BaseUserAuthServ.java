@@ -2,7 +2,6 @@ package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base
 
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.messages.MessageConfig;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities.BaseUserProfile;
-import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities.BaseUserRole;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.repo.BaseUserRepo;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.verifications.emails.service.EmailVerifyServ;
 import lombok.AllArgsConstructor;
@@ -59,9 +58,7 @@ public class BaseUserAuthServ implements UserDetailsService {
             userProfile = this.userRepo.findByEmail(email).orElseThrow(() -> new Exception(
                     this.msgSrc.getMessage("error.user.notExist", null, Locale.ENGLISH)
             ));
-            if (!userProfile.getAuthorities().contains(BaseUserRole.ADMIN)) {
-                userProfile.setVerified(true);
-            }
+            userProfile.setVerified(true);
         } else {
             throw new Exception(this.msgSrc.getMessage(
                     "error.code.verify.denied", null, Locale.ENGLISH

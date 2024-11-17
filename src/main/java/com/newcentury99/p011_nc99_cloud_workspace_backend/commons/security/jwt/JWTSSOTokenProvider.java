@@ -1,7 +1,7 @@
 package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.jwt;
 
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities.UserACL;
-import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities.BaseUserProfile;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities.CommonUserProfile;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.service.BaseUserAuthServ;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.sso.client.SSOClient;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.sso.dto.TokenIntrospectAPIDTO;
@@ -94,7 +94,7 @@ public class JWTSSOTokenProvider {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String email = getEmailFromToken(token);
-        BaseUserProfile profile = (BaseUserProfile) userDetails;
+        CommonUserProfile profile = (CommonUserProfile) userDetails;
         return (email.equals(profile.getEmail())) && !isTokenExpired(token);
     }
 }
