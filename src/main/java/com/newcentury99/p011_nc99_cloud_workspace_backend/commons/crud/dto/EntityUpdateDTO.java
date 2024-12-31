@@ -17,28 +17,30 @@ public class EntityUpdateDTO {
     public static abstract class Response extends GeneralResDTO { }
 
     @Data
-    public static abstract class SingleRequest<T, ID> implements Request {
+    public static abstract class SingleRequest<T> implements Request {
         @NotNull(message = "valid.id.null")
-        private ID id;
-        private List<String> resetColumn;
+        protected String id;
+        @Size(min = 1, max = 250, message = "valid.name.size")
+        protected String name;
+        protected List<String> resetColumn;
         public abstract T toEntity(T target);
     }
 
     @Data
-    public static abstract class BulkRequest<T, ID> implements Request {
+    public static abstract class BulkRequest<T> implements Request {
         @Valid
         @Size(min = 1, max = 100, message = "valid.id.size")
         @NotEmpty(message = "valid.id.empty")
         @UniqueElements(message = "valid.id.unique")
-        private List<@NotNull(message = "valid.id.null") ID> ids;
-        public abstract List<T> toEntity(List<T> targets);
+        protected List<@NotNull(message = "valid.id.null") String> ids;
+        public abstract List<T> toEntities(List<T> targets);
     }
 
     @Data
     @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
     public static class SingleResponse<T> extends Response {
-        private T updated;
+        protected T updated;
         public SingleResponse(T entity) {
             this.updated = entity;
         }
@@ -48,7 +50,7 @@ public class EntityUpdateDTO {
     @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
     public static class BulkResponse<T> extends Response {
-        private List<T> updated;
+        protected List<T> updated;
         public BulkResponse(List<T> entity) {
             this.updated = entity;
         }

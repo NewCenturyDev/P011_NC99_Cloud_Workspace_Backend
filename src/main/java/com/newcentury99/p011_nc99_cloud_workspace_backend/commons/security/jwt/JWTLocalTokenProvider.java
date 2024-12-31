@@ -1,6 +1,6 @@
 package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.jwt;
 
-import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities.BaseUserProfile;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.domains.users.entity.UserProfile;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -70,7 +70,7 @@ public class JWTLocalTokenProvider {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String email = getEmailFromToken(token);
-        BaseUserProfile profile = (BaseUserProfile) userDetails;
+        UserProfile profile = (UserProfile) userDetails;
         return (email.equals(profile.getEmail())) && !isTokenExpired(token);
     }
 }

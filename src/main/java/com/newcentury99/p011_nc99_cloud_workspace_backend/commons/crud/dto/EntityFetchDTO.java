@@ -21,29 +21,39 @@ public class EntityFetchDTO {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class IDRequest<ID> implements SingleRequest {
+    public static class IdRequest implements SingleRequest {
         @NotNull(message = "valid.id.null")
-        private ID id;
+        protected String id;
     }
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class IDsRequest<ID> implements BulkRequest {
+    public static class IdsRequest implements BulkRequest {
         @Valid
         @Size(min = 1, max = 100, message = "valid.id.size")
         @NotEmpty(message = "valid.id.empty")
         @UniqueElements(message = "valid.id.unique")
-        private List<@NotNull(message = "valid.id.null") ID> ids;
+        protected List<@NotNull(message = "valid.id.null") String> ids;
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class NameSearchRequest extends PageRequest {
+        @NotEmpty(message = "valid.name.empty")
+        @Size(min = 1, max = 250, message = "valid.name.size")
+        protected String name;
     }
 
     @Data
     public static class PageRequest implements Request {
         @PositiveOrZero(message = "valid.page.positive")
-        private Integer pageIdx;
+        protected Integer pageIdx;
 
         @PositiveOrZero(message = "valid.page.positive")
-        private Integer pageSize;
+        protected Integer pageSize;
     }
 
     @Data
@@ -70,12 +80,12 @@ public class EntityFetchDTO {
     @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
     public static class PageResponse<T> extends Response {
-        private Page<T> results;
-        private Integer pageIdx;
-        private Integer totalPages;
-        private Integer pageSize;
-        private Integer elementCnt;
-        private Long elementTotalCnt;
+        protected Page<T> results;
+        protected Integer pageIdx;
+        protected Integer totalPages;
+        protected Integer pageSize;
+        protected Integer elementCnt;
+        protected Long elementTotalCnt;
         public PageResponse(Page<T> entityPages) {
             this.results = entityPages;
             this.pageIdx = entityPages.getNumber();

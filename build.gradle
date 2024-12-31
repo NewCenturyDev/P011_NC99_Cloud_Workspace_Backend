@@ -55,6 +55,7 @@ dependencies {
     implementation "org.imgscalr:imgscalr-lib:4.2"
     implementation "io.github.kostaskougios:cloning:1.10.3"
     implementation "commons-io:commons-io:2.15.0"
+    implementation "com.github.f4b6a3:uuid-creator:4.2.0"
 
     compileOnly "org.projectlombok:lombok"
     developmentOnly "org.springframework.boot:spring-boot-devtools"

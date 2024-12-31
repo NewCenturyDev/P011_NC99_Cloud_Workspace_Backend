@@ -1,8 +1,7 @@
 package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.jwt;
 
-import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities.UserACL;
-import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.entities.CommonUserProfile;
-import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.service.BaseUserAuthServ;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.CommonUserProfile;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.domains.users.services.UserAuthServ;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.sso.client.SSOClient;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.sso.dto.TokenIntrospectAPIDTO;
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.utils.APIUtil;
@@ -16,7 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+//import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -25,7 +24,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Getter
-@Component
+//@Component
 @RequiredArgsConstructor
 /* JWT 토큰을 발행하고 관리하는 클래스 */
 public class JWTSSOTokenProvider {
@@ -39,7 +38,7 @@ public class JWTSSOTokenProvider {
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     // 인증 토큰 유효기간 (한 달)
     public static final long JWT_TOKEN_VALIDITY = 30 * 24 * 60 * 60;
-    private final BaseUserAuthServ userAuthServ;
+    private final UserAuthServ workspaceUserAuthServ;
 
     protected TokenIntrospectAPIDTO introspectToken(String token) throws Exception {
         Map<String, Object> queryParams = new HashMap<>();
@@ -72,13 +71,9 @@ public class JWTSSOTokenProvider {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public String issue(String id, UserACL privileges) {
+    public String issue(String id) {
         // JWT payload 에 저장되는 정보단위, 보통 여기서 user 를 식별하는 값을 넣는다 (claim 의 주체)
         Claims claims = Jwts.claims().setSubject(id);
-        // 권한 정보 삽입
-        claims.put("roles", privileges.getRole());
-        claims.put("service", privileges.getService());
-
         return write(id, claims);
     }
 

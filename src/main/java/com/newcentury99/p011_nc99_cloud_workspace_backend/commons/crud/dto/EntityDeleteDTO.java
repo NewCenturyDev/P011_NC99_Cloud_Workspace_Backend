@@ -20,39 +20,39 @@ public class EntityDeleteDTO {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SingleRequest<ID> implements Request {
+    public static class SingleRequest implements Request {
         @NotNull(message = "valid.id.null")
-        private ID id;
+        protected String id;
     }
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class BulkRequest<ID> implements Request {
+    public static class BulkRequest implements Request {
         @Valid
         @Size(min = 1, max = 100, message = "valid.id.size")
         @NotEmpty(message = "valid.id.empty")
         @UniqueElements(message = "valid.id.unique")
-        private List<@NotNull(message = "valid.id.null") ID> ids;
+        protected List<@NotNull(message = "valid.id.null") String> ids;
     }
 
     @Data
     @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
-    public static class SingleResponse<ID> extends Response {
-        private ID deletedID;
-        public SingleResponse(ID entityID) {
-            this.deletedID = entityID;
+    public static class SingleResponse extends Response {
+        private String deletedId;
+        public SingleResponse(String entityId) {
+            this.deletedId = entityId;
         }
     }
 
     @Data
     @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
-    public static class BulkResponse<ID> extends Response {
-        private List<ID> deletedIDs;
-        public BulkResponse(List<ID> deletedIDs) {
-            this.deletedIDs = deletedIDs;
+    public static class BulkResponse extends Response {
+        private List<String> deletedIds;
+        public BulkResponse(List<String> deletedIds) {
+            this.deletedIds = deletedIds;
         }
     }
 }

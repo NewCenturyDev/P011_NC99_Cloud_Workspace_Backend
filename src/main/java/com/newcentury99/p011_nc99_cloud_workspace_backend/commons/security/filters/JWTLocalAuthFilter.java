@@ -1,7 +1,7 @@
 package com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.filters;
 
 import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.jwt.JWTLocalTokenProvider;
-import com.newcentury99.p011_nc99_cloud_workspace_backend.commons.security.base.service.BaseUserAuthServ;
+import com.newcentury99.p011_nc99_cloud_workspace_backend.domains.users.services.UserAuthServ;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -28,7 +28,7 @@ import java.util.Arrays;
 /* JWT 토큰 필터를 구현하는 클래스 */
 public class JWTLocalAuthFilter extends OncePerRequestFilter {
     private final JWTLocalTokenProvider jwtLocalTokenProvider;
-    private final BaseUserAuthServ baseUserAuthServ;
+    private final UserAuthServ baseUserAuthServ;
 
 
     @Override

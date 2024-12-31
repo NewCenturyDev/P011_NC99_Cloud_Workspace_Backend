@@ -25,7 +25,7 @@ public class EntityCreateDTO {
     @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
     public static class SingleResponse<T> extends Response {
-        private T created;
+        protected T created;
         public SingleResponse(T entity) {
             this.created = entity;
         }
@@ -35,7 +35,7 @@ public class EntityCreateDTO {
     @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
     public static class BulkResponse<T> extends Response {
-        private List<T> created;
+        protected List<T> created;
         public BulkResponse(List<T> created) {
             this.created = created;
         }
